@@ -11,13 +11,13 @@ public class UserDAO {
     private String jdbcUsername = "root";
     private String jdbcPassword = "password";
 
-    private static final String INSERT_USERS_SQL = "INSERT INTO users" + "  (name, email, country,eta,id) VALUES "
-            + " (?, ?, ?, ?, ?);";
+    private static final String INSERT_USERS_SQL = "INSERT INTO users" + "  (name, email, country,eta) VALUES "
+            + " (?, ?, ?, ?);";
 
     private static final String SELECT_USER_BY_ID = "select id,name,email,country from users where id =?";
     private static final String SELECT_ALL_USERS = "select * from users";
     private static final String DELETE_USERS_SQL = "delete from users where id = ?;";
-    private static final String UPDATE_USERS_SQL = "update users set name = ?,email= ?, country =?, eta=?, id=? where id = ?;";
+    private static final String UPDATE_USERS_SQL = "update users set name = ?,email= ?, country =?, eta=? where id = ?;";
 
     public UserDAO() {
     }
@@ -38,8 +38,6 @@ public class UserDAO {
             preparedStatement.setString(2, user.getEmail());
             preparedStatement.setString(3, user.getCountry());
             preparedStatement.setInt(4,user.getEta());
-            preparedStatement.setInt(5,user.getId());
-
             System.out.println(preparedStatement);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
@@ -60,12 +58,11 @@ public class UserDAO {
 
             // Step 4: Process the ResultSet object.
             while (rs.next()) {
-
                 String name = rs.getString("name");
                 String email = rs.getString("email");
                 String country = rs.getString("country");
                 int eta = rs.getInt("eta");
-                user = new User(id,name, email, country,eta);
+                user = new User(id, name, email, country,eta);
             }
         } catch (SQLException e) {
             printSQLException(e);
@@ -90,12 +87,12 @@ public class UserDAO {
 
             // Step 4: Process the ResultSet object.
             while (rs.next()) {
-                int id = rs.getInt("id");
+            //    int id = rs.getInt("id");
                 String name = rs.getString("name");
                 String email = rs.getString("email");
                 String country = rs.getString("country");
                 int eta = rs.getInt("eta");
-                users.add(new User(id, name, email, country,eta));
+                users.add(new User( name, email, country,eta));
             }
         } catch (SQLException e) {
             printSQLException(e);
@@ -125,7 +122,7 @@ public class UserDAO {
             statement.setString(2, user.getEmail());
             statement.setString(3, user.getCountry());
             statement.setInt(4, user.getEta());
-            statement.setInt(5, user.getId());
+            //statement.setInt(5, user.getId());
 
             rowUpdated = statement.executeUpdate() > 0;
         } catch (ClassNotFoundException e) {

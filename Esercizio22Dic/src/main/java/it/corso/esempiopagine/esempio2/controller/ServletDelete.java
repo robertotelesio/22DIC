@@ -7,34 +7,42 @@ import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
 
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.List;
 
-@WebServlet(name = "ServletInserUser", value = "/ServletInserUser")
-public class ServletInserUser extends HttpServlet {
+@WebServlet(name = "ServletDelete", value = "/ServletDelete")
+public class ServletDelete extends HttpServlet {
     private UserDAO userDAO;
     public void init() {
         userDAO = new UserDAO();
     }
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        RequestDispatcher dispatcher = request.getRequestDispatcher("user-form.jsp");
+
+        RequestDispatcher dispatcher = request.getRequestDispatcher("userDelete.jsp");
         dispatcher.forward(request, response);
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String name = request.getParameter("name");
-        String email = request.getParameter("email");
-        String country = request.getParameter("country");
-         int eta = Integer.parseInt(request.getParameter("eta"));
-        User newUser = new User(name, email, country,eta);
+
+        Integer id = Integer.parseInt(request.getParameter("id"));
+
+
         try {
-            userDAO.insertUser(newUser);
+            userDAO.deleteUser(id);
         } catch (SQLException e) {
             throw new RuntimeException(e);
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
         }
-        response.sendRedirect("userInserito.jsp");
+
+
+        request.setAttribute("delete_msg", "utente rimosso dal DB!");
+        RequestDispatcher dispatcher = request.getRequestDispatcher("userDelete.jsp");
+        dispatcher.forward(request,response);
     }
 }
+

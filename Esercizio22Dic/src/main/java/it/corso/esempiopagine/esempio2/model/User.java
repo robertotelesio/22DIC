@@ -10,8 +10,13 @@ public class User {
 
     protected int eta;
 
-    public User() {
+    public User(String name, String email, String country, int eta) {
+        this.name = name;
+        this.email = email;
+        this.country = country;
+        this.eta = eta;
     }
+
 
     public User(int id,String name, String email, String country, int eta) {
         super();
